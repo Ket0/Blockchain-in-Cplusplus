@@ -31,9 +31,9 @@ using namespace std;
 void genHash(Block blockToHash) {
     // Datenmember auslesen und eventuell konvertieren
     int index = blockToHash.Getm_idx();
-    auto index_str = std::to_string(index);
+    auto index_str = std::to_string(index); /* benÃ¶tigt aktuellen C++ Compiler sonst wird std::to_string Fehler erzeugen*/
 
-    // Datenmember zusammenfügen
+    // Datenmember zusammenfÃ¼gen
 
 
     // Hash erstellen
@@ -76,7 +76,7 @@ Block erzeugeGenesisBlock(){
     myGenBlock.Setm_timestamp("16.07.2018");
     myGenBlock.Setm_data("Genesis Block");
 
-    // Gib Block zurück
+    // Gib Block zurÃ¼ck
     return myGenBlock;
 };
 
@@ -98,7 +98,7 @@ int main(){
     std::cout << "Erstelle Genesisblock.\n";
     //meinGenesisBlock = erzeugeGenesisblock();
 
-    // Block einfügen
+    // Block einfÃ¼gen
     //myBlockchain.push_back(myBlock);
     //myBlockchain.push_back(myBlock2);
 
