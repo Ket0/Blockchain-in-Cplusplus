@@ -13,7 +13,7 @@
 // In den folgend gezeigten Programmanweisungen wird meine Python Blockchain
 // in C++ umgesetzt.
 //
-//
+//  
 
 // Includes
 #include <string>
