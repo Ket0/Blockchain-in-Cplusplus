@@ -88,17 +88,20 @@ GenesisBlock erzeugeGenesisBlock(){
 //
 SBlock erzeugeBlock(std::string myData, const std::vector<Block>& myContainer){
 
-    if (myContainer.size() == 0) {
+    if (myContainer.empty()) {
         std::cout << "\nKeine Elemente in der Blockchain.\n";
     }
     else {
+        //int preIdx0 = myContainer.back().Getm_idx();
+        //std::cout << "preIdx0 :" << preIdx0;
 
         int preIdx = myContainer.size();
-        int newIdx = preIdx-1;
+        std::cout << "Container size : " << preIdx << "\n";
+        int newIdx = preIdx+1;
         std::cout << "Neuer Index lautet: " << newIdx << "\n";
 
         std::string preHash = "";
-        preHash = myContainer[preIdx].Getm_preHash();
+        //preHash = myContainer[preIdx].Getm_preHash();
 
         //std::string newTime =
 
@@ -111,7 +114,7 @@ SBlock erzeugeBlock(std::string myData, const std::vector<Block>& myContainer){
 };
 
 // Hilfsfunktionen
-void printGenesisBlock(GenesisBlock& myBlock){
+void printGenesisBlock(const GenesisBlock& myBlock){
     std::cout << "\nDie Attribute von Block " << myBlock.Getm_idx() << " lauten: \n";
     std::cout << " Blockindex: " << myBlock.Getm_idx() << "\n";
     std::cout << " Hash Vorgaenger: " << myBlock.Getm_preHash() << "\n";
@@ -119,7 +122,7 @@ void printGenesisBlock(GenesisBlock& myBlock){
     std::cout << " Blockdaten: " << myBlock.Getm_data() << "\n";
 };
 
-void printBlock(SBlock& myBlock){
+void printBlock(const SBlock& myBlock){
     std::cout << "\nDie Attribute von Block " << myBlock.Getm_idx() << " lauten: \n";
     std::cout << " Blockindex: " << myBlock.Getm_idx() << "\n";
     std::cout << " Hash Vorgaenger: " << myBlock.Getm_preHash() << "\n";
@@ -157,7 +160,9 @@ int main(){
 
     std::cout << "\nmyBlock0 Index: " << GenesisBlock.Getm_idx();
     std::cout << "\nmyBlock0 Index: " << myBlockchain.front().Getm_idx();
-    std::cout << "\nmyBlock1 Index: " << myBlockchain.at(0).Getm_idx();
+    std::cout << "\nmyBlock0 Index: " << myBlockchain.at(0).Getm_idx();
+
+    std::cout << "\nmyBlock1 Index: " << myBlockchain.at(1).Getm_idx();
     std::cout << "\nmyBlock1 Index: " << myBlock2.Getm_idx() << "\n";
 
     /*
@@ -165,6 +170,8 @@ int main(){
         std::cout << "Block Payload: " << x.Getm_data() << "\n";
     };
     */
+
+    SBlock einTestBlock = erzeugeBlock("meineDaten", myBlockchain);
 
     /*
     Block myTestBlock;
