@@ -22,15 +22,20 @@
 #include <functional> /* hash */
 
 #include "Block.h"
-#include "SBlock.h"
-#include "GenesisBlock.h"
-
 
 using namespace std;
 
-// Funktionen
-//
-std::string genHash(SBlock blockToHash) {
+std::string getTime(){
+    time_t rawtime;
+    struct tm * timeinfo;
+
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+    printf ("Current local time and date: %s", asctime(timeinfo));
+    return asctime(timeinfo);
+};
+
+const std::string genHash(const Block& blockToHash){
 
     // Datenmember auslesen und eventuell konvertieren
     int index = blockToHash.Getm_idx();
@@ -55,50 +60,21 @@ std::string genHash(SBlock blockToHash) {
     return hashMe_str;
 };
 
-// Zeit
-//
-std::string getTime(){
-    time_t rawtime;
-    struct tm * timeinfo;
-
-    time (&rawtime);
-    timeinfo = localtime (&rawtime);
-    printf ("Current local time and date: %s", asctime(timeinfo));
-    return asctime(timeinfo);
-};
-
-/*
-// GenesisBlock
-//
-GenesisBlock erzeugeGenesisBlock(){
-    // erzeuge
-    GenesisBlock myGenBlock;
-
-    myGenBlock.Setm_idx(0);
-    myGenBlock.Setm_preHash("0");
-    myGenBlock.Setm_timestamp("01.01.2018");
-    myGenBlock.Setm_data("The Times 03/Jan/2009 Chancellor on brink of second bailout for banks.");
-
-    // Gib Block zurück
-    return myGenBlock;
-};
-*/
-
-// Diese Funktion erzeugt die neuen Blöcke
-//
-SBlock erzeugeBlock(std::string myData, const std::vector<Block>& myContainer){
-
-    if (myContainer.empty()) {
-        std::cout << "\nKeine Elemente in der Blockchain.\n";
-    }
-    else {
+Block erzeugeBlock(std::string myData, const std::vector<Block>& myContainer){
+    // Prüfe Kettenlaenge
+    if (!myContainer.empty()){
+        const int anzahlBloecke = myContainer.size();
+        std::cout << "Laenge der Blockchain = ", anzahlBloecke << "\nErzeuge naechsten Block.\n";
         //int preIdx0 = myContainer.back().Getm_idx();
         //std::cout << "preIdx0 :" << preIdx0;
 
+        // Erzeuge Block X (Bx)
+        Block Bx;
+
         int preIdx = myContainer.size();
-        std::cout << "Container size : " << preIdx << "\n";
+        //std::cout << "Container size : " << preIdx << "\n";
         int newIdx = preIdx+1;
-        std::cout << "Neuer Index lautet: " << newIdx << "\n";
+        //std::cout << "Neuer Index lautet: " << newIdx << "\n";
 
         std::string preHash = "";
         //preHash = myContainer[preIdx].Getm_preHash();
@@ -106,22 +82,50 @@ SBlock erzeugeBlock(std::string myData, const std::vector<Block>& myContainer){
         //std::string newTime =
 
         //std::string
+        return Bx;
+    };
+    else {
+        std::cout << "Blockchain enthaelt keine Bloecke. Laenge = ", myContainer.size() << "\nErzeuge ersten Block.\n";
 
-    }
+        // GenesisBlock (Block Null = B0)
+        Block B0;
+        // Attribute setzen
+        B0.Setm_idx(0);
+        B0.Setm_preHash("0");
+        B0.Setm_timestamp("01012018");
+        B0.Setm_data("myData");
 
-    SBlock meinNeuerBlock;
-    return meinNeuerBlock;
+        // Hashen
+        std::string B0_hash = genHash(B0);
+
+        // In Datenstruktur einfügen
+        myContainer.push_back(B0);
+        std::cout << "Laenge der Blockchain = ", myContainer.size() << "\n";
+
+        // Zurückgeben
+        return B0;
+    };
+};
+
+Block erzeugeGenesisBlock(std::string myData, const std::vector<Block>& myContainer){
+
+    // GenesisBlock
+    Block B0;
+    B0.Setm_idx(0);
+    B0.Setm_preHash("0");
+    B0.Setm_timestamp("01012018");
+
+    // Hashen
+    std::string B0_hash = genHash(B0);
+
+    // In Datenstruktur einfügen
+    myContainer.push_back(B0);
+
+    // Zurückgeben
+    return B0;
 };
 
 // Hilfsfunktionen
-void printGenesisBlock(const GenesisBlock& myBlock){
-    std::cout << "\nDie Attribute von Block " << myBlock.Getm_idx() << " lauten: \n";
-    std::cout << " Blockindex: " << myBlock.Getm_idx() << "\n";
-    std::cout << " Hash Vorgaenger: " << myBlock.Getm_preHash() << "\n";
-    std::cout << " Zeitmarke: " << myBlock.Getm_timestamp() << "\n";
-    std::cout << " Blockdaten: " << myBlock.Getm_data() << "\n";
-};
-
 void printBlock(const SBlock& myBlock){
     std::cout << "\nDie Attribute von Block " << myBlock.Getm_idx() << " lauten: \n";
     std::cout << " Blockindex: " << myBlock.Getm_idx() << "\n";
@@ -142,28 +146,14 @@ int main(){
     std::vector<Block> myBlockchain;
 
     std::cout << "Erstelle Genesisblock.\n";
-    GenesisBlock GenesisBlock;
-    printGenesisBlock(GenesisBlock);
-
+    // b1
     //meinGenesisBlock = erzeugeGenesisblock();
 
     // Block einfügen
-    myBlockchain.push_back(GenesisBlock);
-    //myBlockchain.push_back(myBlock2);
-    SBlock myBlock2;
-    myBlock2.Setm_idx(1);
-
-    myBlockchain.push_back(myBlock2);
+    myBlockchain.push_back(b1);
 
     // Ausgeben
     std::cout << "\nAnzahl Elemente in BC: " << myBlockchain.size() << "\n";
-
-    std::cout << "\nmyBlock0 Index: " << GenesisBlock.Getm_idx();
-    std::cout << "\nmyBlock0 Index: " << myBlockchain.front().Getm_idx();
-    std::cout << "\nmyBlock0 Index: " << myBlockchain.at(0).Getm_idx();
-
-    std::cout << "\nmyBlock1 Index: " << myBlockchain.at(1).Getm_idx();
-    std::cout << "\nmyBlock1 Index: " << myBlock2.Getm_idx() << "\n";
 
     /*
     for (auto x : myBlockchain){
@@ -171,7 +161,9 @@ int main(){
     };
     */
 
-    SBlock einTestBlock = erzeugeBlock("meineDaten", myBlockchain);
+    SBlock t1 = erzeugeBlock("meineDaten", myBlockchain);
+    myBlockchain.push_back(t1);
+    std::cout << "\nAnzahl Elemente in BC: " << myBlockchain.size() << "\n";
 
     /*
     Block myTestBlock;
