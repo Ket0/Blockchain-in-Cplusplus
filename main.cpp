@@ -30,6 +30,7 @@ struct Pruefung;
 
 void printBlock(const Block& myBlock);
 void printKette(const std::vector<Block>& vec);
+void checkString(const std::string& s);
 
 const std::string getTime(){
     // Systemdatum
@@ -40,46 +41,32 @@ const std::string getTime(){
    return dt;
 };
 
+void checkString(const std::string& s){
+    if(!s.empty()){
+        // Wert gut!
+        // Mach gar nichts.
+    }
+    else{
+        std::cout << "Error.\n String empty!\nHit ENTER to stop execution.\n";
+        std::cin.get();
+        abort();
+    };
+};
+
 std::string genHash(Block& b){
-
     // Datenmember auslesen und eventuell konvertieren
-
     int index = b.Getm_idx();
     std::string s1 = std::to_string(index);
 
     // Pruefe erst, ob diese Strings vorhanden sind
     const std::string s2 = b.Getm_preHash();
-    if(!s2.empty()){
-        // Wert gut!
-        // Mach gar nichts.
-    }
-    else{
-        std::cout << "Error.\nHash kann nicht generiert werden.\npreHash empty!\nHit ENTER to stop execution.\n";
-        std::cin.get();
-        abort();
-    };
+    checkString(s2);
 
     const std::string s3 = b.Getm_timestamp();
-    if(!s3.empty()){
-        // Wert gut!
-        // Mach gar nichts.
-    }
-    else{
-        std::cout << "Error.\Zeitstempel kann nicht generiert werden.\nZeitstempel empty!\nHit ENTER to stop execution.\n";
-        std::cin.get();
-        abort();
-    };
+    checkString(s3);
 
     const std::string s4 = b.Getm_data();
-    if(!s4.empty()){
-        // Wert gut!
-        // Mach gar nichts.
-    }
-    else{
-        std::cout << "Error.\Daten kann nicht generiert werden.\nDaten empty!\nHit ENTER to stop execution.\n";
-        std::cin.get();
-        abort();
-    };
+    checkString(s4);
 
     // Datenmember zusammenfügen
     std::string myNewString = s1 + s2 + s3 + s4;
@@ -89,7 +76,6 @@ std::string genHash(Block& b){
 
     // in String umwandeln
     std::string hashMe_str = std::to_string(hashMe(myNewString));
-    //std::cout << "\nHash: " << hashMe_str << "\n";
 
     // Attribut speichern
     b.Setm_blockhash(hashMe_str);
@@ -100,18 +86,16 @@ std::string genHash(Block& b){
 
 
 Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
-    std::cout << "Versuche neuen Block zu erstellen..." << "\n";
+    //std::cout << "Versuche neuen Block zu erstellen..." << "\n";
     // Prüfe Kettenlaenge
     if (!myContainer.empty()){
 
-        // Erzeuge Block X (Bx)
+        // Erzeuge einen weiteren Block Bx
         Block Bx;
 
         int preIdx = myContainer.back().Getm_idx();
-        //std::cout << "preIdx: " << preIdx << "\n";
         int newIdx = preIdx+1;
         Bx.Setm_idx(newIdx);
-        //std::cout << "New Block Index: " << Bx.Getm_idx() << "\n";
 
         // Teste of string leer oder nicht
         const std::string test = myContainer.back().Getm_blockhash();
@@ -128,7 +112,6 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
 
         // Zeit
         std::string myTime = getTime();
-        //std::cout << "Zeit: " << myTime << "\n";
         Bx.Setm_timestamp(myTime);
 
         // Daten
@@ -143,11 +126,11 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
         // Fuege Block in die Kette ein
         myContainer.push_back(Bx);
 
-        std::cout << "...Block erstellt." << "\n";
+        //std::cout << "...Block erstellt." << "\n";
         return Bx;
     }
     else {
-        std::cout << "\nErzeuge ersten Block...\n";
+        //std::cout << "\nErzeuge ersten Block...\n";
 
         // GenesisBlock (Block Null = B0)
         Block B0;
@@ -167,8 +150,9 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
         // Cout Attribute
         //printBlock(B0);
 
+        //std::cout << "...erster Block erstellt.\n\n";
+
         // Zurückgeben
-        std::cout << "...erster Block erstellt.\n\n";
         return B0;
     };
 
@@ -262,9 +246,11 @@ int main(){
     // Hauptschleife
     // Erzeuge weitere Bloecke
     int i = 0; //zaehlvariable
+    const int maxBlocks = 100000*100;
+    std::cout << "\nErzeuge " << maxBlocks << " weitere Bloecke...\n";
     while (true) {
         // Erzeuge i Blöcke
-        if (i<10){
+        if (i<maxBlocks){
             Block bx = erzeugeBlock("myData", myBlockchain);
             i += 1;
         }
@@ -272,8 +258,9 @@ int main(){
             break;
         }//#endIf
     }; //#endWhile
+    std::cout << maxBlocks << " neue Bloecke erzeugt.\n";
 
-    printKette(myBlockchain);
+    //printKette(myBlockchain);
 
     // Ende
     std::cout << "\n// Programmende\n\n";
