@@ -4,6 +4,16 @@
 #include "iostream"
 
 class Block{
+    private:
+        unsigned int m_idx=0;
+        std::string m_preHash="";
+
+        // Alternative
+        // std::vector<string> m_preHash;
+
+        std::string m_timestamp="";
+        std::string m_data="";
+        std::string m_blockhash="";
     public:
         Block();
         Block(unsigned int p_idx, std::string p_preHash, std::string p_time , std::string p_hash);
@@ -20,13 +30,6 @@ class Block{
         const std::string Getm_blockhash() const { return m_blockhash; }
         void Setm_blockhash(std::string val) { m_blockhash = val; }
 
-    private:
-        unsigned int m_idx;
-        std::string m_preHash;
-        std::string m_timestamp;
-        std::string m_data;
-        std::string m_blockhash;
-
         /* GENESIS BLOCK
         const unsigned int m_idx = 0;
         const std::string m_preHash = "0";
@@ -34,6 +37,5 @@ class Block{
         const std::string m_data = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks.";
         const std::string m_blockhash = genHash(B0);
         */
-
 };
 #endif // BLOCK_H
