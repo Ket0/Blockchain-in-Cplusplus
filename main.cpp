@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <functional>
+
 #include "Block.h"
 using namespace std;
 
@@ -31,11 +32,11 @@ void printBlock(const Block& myBlock);
 void printKette(const std::vector<Block>& vec);
 
 const std::string getTime(){
-    // current date/time based on current system
+    // Systemdatum
    time_t now = time(0);
-   // convert now to string form
+   // Konversion in String
    char* dt = ctime(&now);
-   //std::cout << "The local date and time is: " << dt << endl;
+   // Rückgabewert
    return dt;
 };
 
@@ -80,7 +81,7 @@ std::string genHash(Block& b){
         abort();
     };
 
-    // Datenmember zusammenfÃ¼gen
+    // Datenmember zusammenfügen
     std::string myNewString = s1 + s2 + s3 + s4;
 
     // Hash erstellen
@@ -100,7 +101,7 @@ std::string genHash(Block& b){
 
 Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
     std::cout << "Versuche neuen Block zu erstellen..." << "\n";
-    // PrÃ¼fe Kettenlaenge
+    // Prüfe Kettenlaenge
     if (!myContainer.empty()){
 
         // Erzeuge Block X (Bx)
@@ -119,7 +120,7 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
             Bx.Setm_preHash(preHash);
         }
         else{
-            // Hash des VorgÃ¤ngers darf nie leer sein!
+            // Hash des Vorgängers darf nie leer sein!
             std::cout << "Error. Hit ENTER to stop execution.\n";
             std::cin.get();
             abort();
@@ -159,14 +160,14 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
         // Hashen
         std::string B0_hash = genHash(B0);
 
-        // In Datenstruktur einfÃ¼gen
+        // In Datenstruktur einfügen
         std::cout << "Fuege ersten Block in Blockchain ein." << "\n";
         myContainer.push_back(B0);
 
         // Cout Attribute
         //printBlock(B0);
 
-        // ZurÃ¼ckgeben
+        // Zurückgeben
         std::cout << "...erster Block erstellt.\n\n";
         return B0;
     };
@@ -262,7 +263,7 @@ int main(){
     // Erzeuge weitere Bloecke
     int i = 0; //zaehlvariable
     while (true) {
-        // Erzeuge i BlÃ¶cke
+        // Erzeuge i Blöcke
         if (i<10){
             Block bx = erzeugeBlock("myData", myBlockchain);
             i += 1;
