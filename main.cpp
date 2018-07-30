@@ -27,41 +27,24 @@ using namespace std;
 struct Fehler;
 struct Pruefung;
 
-void getTime(){
+void printBlock(const Block& myBlock);
+void printKette(const std::vector<Block>& vec);
 
-    /*
-    time_t rawtime;
-    struct tm* timeinfo;
-
-    time (&rawtime);
-    timeinfo = localtime (&rawtime);
-
-    char myTime = asctime(timeinfo);
-
-    printf ("Current local time and date: %s", myTime );
-    return myTime;
-    */
-
-    time_t timer;
-    double seconds;
-    struct tm y2k = {0};
-
-    y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
-  y2k.tm_year = 100; y2k.tm_mon = 0; y2k.tm_mday = 1;
-
-
-    time(&timer);
-    seconds = difftime(timer,mktime(&y2k));
-    printf("Zeit: %d", seconds);
-
+const std::string getTime(){
+    // current date/time based on current system
+   time_t now = time(0);
+   // convert now to string form
+   char* dt = ctime(&now);
+   //std::cout << "The local date and time is: " << dt << endl;
+   return dt;
 };
 
 std::string genHash(Block& b){
 
     // Datenmember auslesen und eventuell konvertieren
 
-    //int index = b.Getm_idx();
-    //std::string index_str = std::to_string(index);
+    int index = b.Getm_idx();
+    std::string s1 = std::to_string(index);
 
     // Pruefe erst, ob diese Strings vorhanden sind
     const std::string s2 = b.Getm_preHash();
@@ -98,15 +81,14 @@ std::string genHash(Block& b){
     };
 
     // Datenmember zusammenfügen
-    // std::string myNewString = "abc";
-    std::string myNewString = s2 + s3 + s4;
+    std::string myNewString = s1 + s2 + s3 + s4;
 
     // Hash erstellen
     std::hash<std::string> hashMe;
 
     // in String umwandeln
     std::string hashMe_str = std::to_string(hashMe(myNewString));
-    std::cout << "\nHash: " << hashMe_str << "\n";
+    //std::cout << "\nHash: " << hashMe_str << "\n";
 
     // Attribut speichern
     b.Setm_blockhash(hashMe_str);
@@ -115,27 +97,20 @@ std::string genHash(Block& b){
     return hashMe_str;
 };
 
-void printBlock(const Block& myBlock);
 
 Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
     std::cout << "Versuche neuen Block zu erstellen..." << "\n";
     // Prüfe Kettenlaenge
     if (!myContainer.empty()){
-        // Gib Anzahl der Blöcke aus
-        //const int anzahlBloecke = myContainer.size();
-        //std::cout << "\nLaenge der Blockchain = " << anzahlBloecke << "\nErzeuge naechsten Block.\n";
-
-        //int preIdx0 = myContainer.back().Getm_idx();
-        //std::cout << "preIdx0 :" << preIdx0;
 
         // Erzeuge Block X (Bx)
         Block Bx;
 
         int preIdx = myContainer.back().Getm_idx();
-        std::cout << "preIdx: " << preIdx << "\n";
+        //std::cout << "preIdx: " << preIdx << "\n";
         int newIdx = preIdx+1;
         Bx.Setm_idx(newIdx);
-        std::cout << "New Block Index: " << Bx.Getm_idx() << "\n";
+        //std::cout << "New Block Index: " << Bx.Getm_idx() << "\n";
 
         // Teste of string leer oder nicht
         const std::string test = myContainer.back().Getm_blockhash();
@@ -151,17 +126,19 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
         }
 
         // Zeit
-        Bx.Setm_timestamp("01012018");
+        std::string myTime = getTime();
+        //std::cout << "Zeit: " << myTime << "\n";
+        Bx.Setm_timestamp(myTime);
 
         // Daten
         Bx.Setm_data(myData);
 
-        // Neuer Hash
+        // Neuen Hash erstellen
         std::string myHash = genHash(Bx);
         Bx.Setm_blockhash(myHash);
 
-
         // Pruefe Block
+
         // Fuege Block in die Kette ein
         myContainer.push_back(Bx);
 
@@ -289,7 +266,6 @@ int main(){
         if (i<10){
             Block bx = erzeugeBlock("myData", myBlockchain);
             i += 1;
-            //std::cout << i;
         }
         else{
             break;
