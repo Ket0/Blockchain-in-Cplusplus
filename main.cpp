@@ -17,9 +17,9 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <stdio.h>      /* puts, printf */
-#include <time.h> /* time_t, struct tm, difftime, time, mktime */
-#include <functional> /* hash */
+#include <stdio.h>
+#include <time.h>
+#include <functional>
 #include "Block.h"
 using namespace std;
 
@@ -80,7 +80,7 @@ std::string genHash(Block& b){
         abort();
     };
 
-    // Datenmember zusammenfügen
+    // Datenmember zusammenfÃ¼gen
     std::string myNewString = s1 + s2 + s3 + s4;
 
     // Hash erstellen
@@ -100,7 +100,7 @@ std::string genHash(Block& b){
 
 Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
     std::cout << "Versuche neuen Block zu erstellen..." << "\n";
-    // Prüfe Kettenlaenge
+    // PrÃ¼fe Kettenlaenge
     if (!myContainer.empty()){
 
         // Erzeuge Block X (Bx)
@@ -119,7 +119,7 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
             Bx.Setm_preHash(preHash);
         }
         else{
-            // Hash des Vorgängers darf nie leer sein!
+            // Hash des VorgÃ¤ngers darf nie leer sein!
             std::cout << "Error. Hit ENTER to stop execution.\n";
             std::cin.get();
             abort();
@@ -159,14 +159,14 @@ Block erzeugeBlock(const std::string myData, std::vector<Block>& myContainer){
         // Hashen
         std::string B0_hash = genHash(B0);
 
-        // In Datenstruktur einfügen
+        // In Datenstruktur einfÃ¼gen
         std::cout << "Fuege ersten Block in Blockchain ein." << "\n";
         myContainer.push_back(B0);
 
         // Cout Attribute
         //printBlock(B0);
 
-        // Zurückgeben
+        // ZurÃ¼ckgeben
         std::cout << "...erster Block erstellt.\n\n";
         return B0;
     };
@@ -262,7 +262,7 @@ int main(){
     // Erzeuge weitere Bloecke
     int i = 0; //zaehlvariable
     while (true) {
-        // Erzeuge i Blöcke
+        // Erzeuge i BlÃ¶cke
         if (i<10){
             Block bx = erzeugeBlock("myData", myBlockchain);
             i += 1;
