@@ -1,17 +1,26 @@
 // Einfache Blockchain in C++11
 //
-// Version: 0.2
+// Version: 0.3
 //
 // Autor : Stefan Eickholz
-// Datum:   28.07.2018
+// Datum:   31.07.2018
 // Ort:     Potsdam
+
+
+// Ort:     01010000 01101111 01110100 01110011 01100100 01100001 01101101
+
+//   dBBBBBb     dBBBBP  dBBBBBBP  .dBBBBP     dBBBBb  dBBBBBb     dBBBBBBb
+//       dB'    dBP.BP             BP             dBP       BB          dBP
+//   dBBBP'    dBP.BP     dBP      `BBBBb    dBP dBP    dBP BB   dBPdBPdBP
+//  dBP       dBP.BP     dBP          dBP   dBP dBP    dBP  BB  dBPdBPdBP
+// dBP       dBBBBP     dBP      dBBBBP'   dBBBBBP    dBBBBBBB dBPdBPdBP
+
 // Sprache: C++
-// Version: 11
+// Version: 14
+
 //
 // In den folgend gezeigten Programmanweisungen wird meine Python Blockchain
 // in C++ umgesetzt.
-//
-//
 
 // Includes
 #include <string>
@@ -20,17 +29,16 @@
 #include <stdio.h>
 #include <time.h>
 #include <functional>
-
 #include "Block.h"
 using namespace std;
 
 // Vorangestellte Definition
 struct Fehler;
 struct Pruefung;
-
 void printBlock(const Block& myBlock);
 void printKette(const std::vector<Block>& vec);
 void checkString(const std::string& s);
+void hauptschleife(const int maxBlocks, std::vector<Block>& myBlockchain);
 
 const std::string getTime(){
     // Systemdatum
@@ -223,30 +231,8 @@ struct Pruefung{
         };
 };
 
-// #################################### Main
-// ####################################
-int main(){
-    std::cout << "C++ Version: " << __cplusplus << "\n";
-    std::cout << "\n// Programmstart\n\n";
-    std::cout << "Blockchain in C++\n";
-
-    std::cout << "\nErstelle Blockchain.\n";
-    std::vector<Block> myBlockchain;
-
-    //std::cout << "Erstelle Genesisblock.\n";
-    auto b0 = erzeugeBlock("myData", myBlockchain);
-
-    // Ausgeben
-    //std::cout << "\nAnzahl Elemente in BC: " << myBlockchain.size() << "\n";
-
-    /*
-    printKette(myBlockchain);
-    */
-
-    // Hauptschleife
-    // Erzeuge weitere Bloecke
+void hauptschleife(const int maxBlocks, std::vector<Block>& myBlockchain){
     int i = 0; //zaehlvariable
-    const int maxBlocks = 100000*100;
     std::cout << "\nErzeuge " << maxBlocks << " weitere Bloecke...\n";
     while (true) {
         // Erzeuge i Blöcke
@@ -259,10 +245,24 @@ int main(){
         }//#endIf
     }; //#endWhile
     std::cout << maxBlocks << " neue Bloecke erzeugt.\n";
+};
 
-    //printKette(myBlockchain);
+// #################################### Main
+// ####################################
+int main(){
+    std::cout << "C++ Version: " << __cplusplus << "\n";
+    std::cout << "\n// Programmstart\n\n";
+    std::cout << "Blockchain in C++\n";
 
-    // Ende
+    std::cout << "\nErstelle Blockchain.\n"; // Und Genesisblock
+    std::vector<Block> myBlockchain;
+    Block b0 = erzeugeBlock("myData", myBlockchain);
+
+    // Hauptschleife, erstelle alle weiteren Blöcke
+    const int maxBlocks = 10; // Wieviele Blöcke sollen erstellt werden?
+    hauptschleife(maxBlocks, myBlockchain);
+    printKette(myBlockchain);
+
     std::cout << "\n// Programmende\n\n";
     std::cout << "\nPress ENTER to exit" << std::cin.get();
     return 0;
